@@ -291,6 +291,8 @@ void loop(void)
     for (int16_t i = 0; i < 4; i++) {
       rx_buf[i] = spiReadData();
     }
+    if (rx_buf[0] < 100)
+      buzzerOn(BMZ_FREQ);
     // Serial.println(rx_buf[0]); // print rssi value
   }
 
