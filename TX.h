@@ -272,6 +272,9 @@ void setup(void)
 
 void loop(void)
 {
+  uint32_t last_beep = 0;
+  uint8_t period_beep = 0;
+  uint8_t done_beep = 1;
 
   if (spiReadRegister(0x0C) == 0) {     // detect the locked module and reboot
     Serial.println("module locked?");
@@ -291,9 +294,33 @@ void loop(void)
     for (int16_t i = 0; i < 4; i++) {
       rx_buf[i] = spiReadData();
     }
-    if (rx_buf[0] < 100)
-      buzzerOn(BMZ_FREQ);
-    // Serial.println(rx_buf[0]); // print rssi value
+    
+    if (done_beep == 1) {
+      done_beep = 0;
+      switch (rx_buf[0]) {
+        case 150:
+          period_beep=1000;
+        case 100:
+          period_beep=500;
+        case 50:
+          period_beep=200;
+        case 25:
+          period_beep=100;
+        default:
+        period_beep=0;
+        done_beep = 1;
+      }
+    } else if (period_beep != 0) {
+      if ((millis() - last_beep) >= period_beep) {
+        buzzerOff();
+        done_beep = 1;
+      } else {
+        buzzerOn(BZ_FREQ);
+        last_beep = millis();
+      }
+    }
+
+    Serial.println(rx_buf[0]); // print rssi value
   }
 
   uint32_t time = micros();
