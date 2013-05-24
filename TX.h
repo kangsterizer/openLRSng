@@ -272,10 +272,6 @@ void setup(void)
 
 void loop(void)
 {
-  uint32_t last_beep = 0;
-  uint8_t period_beep = 0;
-  uint8_t done_beep = 1;
-
   if (spiReadRegister(0x0C) == 0) {     // detect the locked module and reboot
     Serial.println("module locked?");
     Red_LED_ON;
@@ -295,32 +291,12 @@ void loop(void)
       rx_buf[i] = spiReadData();
     }
     
-    if (done_beep == 1) {
-      done_beep = 0;
-      switch (rx_buf[0]) {
-        case 150:
-          period_beep=1000;
-        case 100:
-          period_beep=500;
-        case 50:
-          period_beep=200;
-        case 25:
-          period_beep=100;
-        default:
-        period_beep=0;
-        done_beep = 1;
-      }
-    } else if (period_beep != 0) {
-      if ((millis() - last_beep) >= period_beep) {
-        buzzerOff();
-        done_beep = 1;
-      } else {
-        buzzerOn(BZ_FREQ);
-        last_beep = millis();
-      }
-    }
+    if ((rx_buf[0] < 50) && (bind_data.rf_power < RF_POWER_MAX))
+      rfmSetPower(&bind_data, bind_data.rf_power+1);
+    else if ((rx_buf[0] > 150) && (bind_data.rf_power >= RF_POWER_LOW))
+      rfmSetPower(&bind_data, bind_data.rf_power-1);
 
-    Serial.println(rx_buf[0]); // print rssi value
+    //Serial.println(rx_buf[0]); // print rssi value
   }
 
   uint32_t time = micros();
@@ -337,6 +313,7 @@ void loop(void)
           // telemetry lost
           buzzerOn(BZ_FREQ);
           lastTelemetry=0;
+          rfmSetPower(&bind_data, RF_POWER_MAX);
         } else {
           // telemetry link re-established
           buzzerOff();
