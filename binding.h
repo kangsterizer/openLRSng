@@ -11,7 +11,11 @@
 // 2 == 3mW
 // 1 == 1.6mW
 // 0 == 1.3mW
-#define DEFAULT_RF_POWER 7
+#define RF_POWER_MAX 7
+#define RF_POWER_MED 6
+#define RF_POWER_LOW 5
+#define RF_POWER_BIND 0
+#define DEFAULT_RF_POWER RF_POWER_MAX
 
 #define DEFAULT_CARRIER_FREQUENCY 435000000  // Hz  startup frequency
 #define DEFAULT_CHANNEL_SPACING 5 // 50kHz
@@ -47,7 +51,7 @@
 #define DEFAULT_BEACON_DEADTIME 30 // time to wait until go into beacon mode (s)
 #define DEFAULT_BEACON_INTERVAL 10 // interval between beacon transmits (s)
 
-#define BINDING_POWER     0x00 // 1 mW
+#define BINDING_POWER     RF_POWER_BIND
 #define BINDING_VERSION   3
 
 #define EEPROM_OFFSET     0x00
