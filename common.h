@@ -22,6 +22,11 @@ const static uint8_t pktsizes[8] = {0, 7, 11, 12, 16, 17, 21, 0};
 
 const static char *chConfStr[8] = {"N/A", "4+4", "8", "8+4", "12", "12+4", "16", "N/A"};
 
+uint16_t getPPMChannel(uint8_t channel)
+{
+  return PPM[channel];
+}
+
 uint8_t getPacketSize(struct bind_data *bd)
 {
   return pktsizes[(bd->flags & 0x07)];
@@ -409,8 +414,6 @@ void rfmSetPower(struct bind_data *bd, uint8_t power)
   if (bd->rf_power != power) {
     spiWriteRegister(0x6d, power);
     bd->rf_power = power;
-    //Serial.print("Settings power: ");
-    //Serial.println(power);
   }
 }
 
