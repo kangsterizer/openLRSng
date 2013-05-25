@@ -332,6 +332,14 @@ void loop(void)
 
       cli(); // disable interrupts when copying servo positions, to avoid race on 2 byte variable
       packChannels(bind_data.flags & 7, PPM, tx_buf + 1);
+#ifdef PPM_POWER_CHANNEL
+      if (getPPMChannel(PPM_POWER_CHANNEL)  < 50)
+        rfmSetPower(&bind_data, RF_POWER_LOW);
+      else if (getPPMChannel(PPM_POWER_CHANNEL)  < 550)
+        rfmSetPower(&bind_data, RF_POWER_MED);
+      else
+        rfmSetPower(&bind_data, RF_POWER_MAX);
+#endif
       sei();
 
       //Green LED will be on during transmission
