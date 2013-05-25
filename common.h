@@ -396,6 +396,24 @@ void rfmSetChannel(uint8_t ch)
   spiWriteRegister(0x79, ch);
 }
 
+void rfmSetPower(struct bind_data *bd, uint8_t power)
+{
+// 7 == 100mW (or 1000mW with M3/OpenLRSngTx)
+// 6 == 50mW (use this when using booster amp), (800mW with M3/OpenLRSngTx)
+// 5 == 25mW
+// 4 == 13mW
+// 3 == 6mW
+// 2 == 3mW
+// 1 == 1.6mW
+// 0 == 1.3mW
+  if (bd->rf_power != power) {
+    spiWriteRegister(0x6d, power);
+    bd->rf_power = power;
+    //Serial.print("Settings power: ");
+    //Serial.println(power);
+  }
+}
+
 uint8_t rfmGetRSSI(void)
 {
   return spiReadRegister(0x26);
