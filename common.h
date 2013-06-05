@@ -32,6 +32,11 @@ uint8_t getChannelCount(struct bind_data *bd)
   return (((bd->flags & 7)/2) + 1 + (bd->flags & 1)) * 4;
 }
 
+uint16_t getPPMChannel(uint8_t channel)
+{
+  return PPM[channel];
+}
+
 uint32_t getInterval(struct bind_data *bd)
 {
   uint32_t ret;
@@ -567,7 +572,29 @@ void beacon_tone(int16_t hz, int16_t len)
   }
 }
 
-void beacon_send(void)
+void beacon_send_telemetry(void)
+{
+  uint8_t telemetry_packet[4];
+  telemetry_packet[0] = rfmGetRSSI();
+  
+  spiWriteRegister(0x6d, 0x07); //set power
+  tx_packet(telemetry_packet, 4);
+  Green_LED_ON
+  delay(10);
+  Green_LED_OFF
+  spiWriteRegister(0x6d, 0x04);
+  tx_packet(telemetry_packet, 4);
+  Green_LED_ON
+  delay(10);
+  Green_LED_OFF
+  spiWriteRegister(0x6d, 0x00);
+  tx_packet(telemetry_packet, 4);
+  Green_LED_ON
+  delay(10);
+  Green_LED_OFF
+}
+
+void beacon_send_analog(void)
 {
   Green_LED_ON
   ItStatus1 = spiReadRegister(0x03);   // read status, clear interrupt
@@ -614,4 +641,13 @@ void beacon_send(void)
 
   spiWriteRegister(0x07, RF22B_PWRSTATE_READY);
   Green_LED_OFF
+  init_rfm(0);
+}
+
+void beacon_send(struct bind_data *bd)
+{
+  if ((bd->flags & TELEMETRY_ENABLED) && (bd->telemetry_beacon))
+    beacon_send_telemetry();
+  else
+    beacon_send_analog();
 }

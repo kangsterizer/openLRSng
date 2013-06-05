@@ -14,7 +14,7 @@
 #define DEFAULT_RF_POWER 7
 
 #define DEFAULT_CARRIER_FREQUENCY 435000000  // Hz  startup frequency
-#define DEFAULT_CHANNEL_SPACING 5 // 50kHz
+#define DEFAULT_CHANNEL_SPACING 200 // 50kHz
 #define DEFAULT_HOPLIST 22,10,19,34,49,41
 #define DEFAULT_RF_MAGIC 0xDEADFEED
 
@@ -43,7 +43,10 @@
 // helpper macro for US FRS channels 1-7
 #define US_FRS_CH(x) (462537500L + 25000L * (x)) // valid for ch1-ch7
 
-#define DEFAULT_BEACON_FREQUENCY 0 // disable beacon
+#define TELEMETRY_BEACON 1 //enable beacon via telemetry (if enabled, telemetry and beacon frequency is also needed)
+#define PPM_BUTTON_CHANNEL 7
+
+#define DEFAULT_BEACON_FREQUENCY US_FRS_CH(0) // enable beacon
 #define DEFAULT_BEACON_DEADTIME 30 // time to wait until go into beacon mode (s)
 #define DEFAULT_BEACON_INTERVAL 10 // interval between beacon transmits (s)
 
@@ -89,6 +92,7 @@ struct bind_data {
   uint32_t beacon_frequency;
   uint8_t beacon_interval;
   uint8_t beacon_deadtime;
+  uint8_t telemetry_beacon;
 } bind_data;
 
 
@@ -158,6 +162,7 @@ void bindInitDefaults(void)
   bind_data.beacon_frequency = DEFAULT_BEACON_FREQUENCY;
   bind_data.beacon_interval = DEFAULT_BEACON_INTERVAL;
   bind_data.beacon_deadtime = DEFAULT_BEACON_DEADTIME;
+  bind_data.telemetry_beacon = TELEMETRY_BEACON;
 }
 
 void bindRandomize(void)

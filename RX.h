@@ -413,8 +413,7 @@ void loop()
         } else if (lostpack == 12) {   // beacon mode active
           if ((time - last_beacon) > (bind_data.beacon_interval * 1000000UL)) {
             last_beacon = time;
-            beacon_send();
-            init_rfm(0);   // go back to normal RX
+            beacon_send(&bind_data);
             rx_reset();
           }
         }
