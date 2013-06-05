@@ -13,6 +13,8 @@
 // 0 == 1.3mW
 #define DEFAULT_RF_POWER 7
 
+#define PPM_BUTTON_CHANNEL 7 // That's channel 8 as we start at 0
+
 #define DEFAULT_CARRIER_FREQUENCY 435000000  // Hz  startup frequency
 #define DEFAULT_CHANNEL_SPACING 5 // 50kHz
 #define DEFAULT_HOPLIST 22,10,19,34,49,41

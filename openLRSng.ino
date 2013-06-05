@@ -37,7 +37,7 @@
 
 //####### COMPILATION TARGET #######
 // Enable to compile transmitter code, default is RX
-//#define COMPILE_TX
+#define COMPILE_TX
 
 //####### TX BOARD TYPE #######
 // 0 = Original Flytron M1 Tx Board (not verified)
@@ -45,7 +45,7 @@
 // 2 = Original M2/M3 Tx Board or OrangeRx UHF TX
 // 3 = OpenLRS Rx v2 Board works as TX
 // 4 = OpenLRSngTX (tbd.)
-#define TX_BOARD_TYPE 2
+#define TX_BOARD_TYPE 4
 
 //####### RX BOARD TYPE #######
 // 3 = OpenLRS Rx v2 Board or OrangeRx UHF RX

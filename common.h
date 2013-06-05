@@ -27,6 +27,11 @@ uint8_t getPacketSize(struct bind_data *bd)
   return pktsizes[(bd->flags & 0x07)];
 }
 
+uint16_t getPPMChannel(uint8_t channel)
+{
+  return PPM[channel];
+}
+
 uint8_t getChannelCount(struct bind_data *bd)
 {
   return (((bd->flags & 7)/2) + 1 + (bd->flags & 1)) * 4;

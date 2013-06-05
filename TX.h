@@ -292,6 +292,33 @@ void loop(void)
       rx_buf[i] = spiReadData();
     }
     // Serial.println(rx_buf[0]); // print rssi value
+#ifdef PPM_BUTTON_CHANNEL
+    if (getPPMChannel(PPM_BUTTON_CHANNEL) > 500) {
+      if (rx_buf[0] > 200)
+        buzzerOn(8000);
+      else if (rx_buf[0] > 180)
+        buzzerOn(7000);
+      else if (rx_buf[0] > 170)
+        buzzerOn(6000);
+      else if (rx_buf[0] > 160)
+        buzzerOn(5000);
+      else if (rx_buf[0] > 140)
+        buzzerOn(5000);
+      else if (rx_buf[0] > 100)
+        buzzerOn(5000);
+      else if (rx_buf[0] > 70)
+        buzzerOn(4000);
+      else if (rx_buf[0] > 50)
+        buzzerOn(3000);
+      else if (rx_buf[0] > 25)
+        buzzerOn(2000);
+      else if (rx_buf[0] > 1)
+        buzzerOn(1000);
+      else {
+        buzzerOn(500);
+      }
+    }
+#endif 
   }
 
   uint32_t time = micros();
